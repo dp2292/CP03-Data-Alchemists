@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+numpy
+pickle
+pandas
+sklearn
+shutil
+joblib
+bs4
+re
+matplotlib
+plotly
+seaborn
+Ipython
