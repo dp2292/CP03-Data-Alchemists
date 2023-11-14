@@ -14,19 +14,19 @@
 In this project we had to make predictions regarding the ICC World Cup 2023. At the time of making this project, the world cup is ongoing and many matches are yet to be played. 
 
 ### Tasks
-Task 1:
-a. Predicting the batsman who will score most runs in the tournament. 
-b. Predicting the bowler who will be the leading wicket-taker in the tournament.
-Task 2: Predicting the Finalist Teams and Players
+Task 1: \
+a. Predicting the batsman who will score most runs in the tournament. \
+b. Predicting the bowler who will be the leading wicket-taker in the tournament. \
+Task 2: Predicting the Finalist Teams and Players \
 Task 3: Predict the Winner of ICC Cricket World Cup 2023
 
 ### Result of the tasks
 
 Task 1:
-a. The batsman with the most scored runs (after 9 matches of each team - not including semi-finals and final match) -
-b. The leading wicket-taker bowler (after 9 matches of each team - not including semi-finals and final match) -
-Task 2. Finalist Teams and Players -
-Task 3. Winner of ICC Cricket World Cup 2023 - 
+a. The batsman with the most scored runs (after 9 matches of each team - not including semi-finals and final match) - \
+b. The leading wicket-taker bowler (after 9 matches of each team - not including semi-finals and final match) - \
+Task 2. Finalist Teams and Players - \
+Task 3. Winner of ICC Cricket World Cup 2023 - \
 
 ### Data Used
 
@@ -193,6 +193,15 @@ G. player_details.csv (Scrapped from ESPN Cricinfo)
 12. `total_wickets`: The overall number of wickets taken by the player.
 13. `bowling_avg`: The bowling average of the player, calculated as bowling_runs divided by the number of wickets taken.
 14. `economy`: The economy rate of the player in bowling, indicating the average number of runs conceded per over.
+
+H. previous_data_per.csv (Scrapped, Previous Data Percentages)
+
+1. `Team`: The cricket team for which the statistics are recorded.
+2. `Opposition`: The opposing team against which matches were played.
+3. `Mat`: The total number of matches played by the team against the specified opposition.
+4. `Won`: The number of matches won by the team against the specified opposition.
+5. `Lost`: The number of matches lost by the team against the specified opposition.
+6. `%`: The win percentage, calculated as the ratio of matches won to the total matches played, expressed as a percentage.
 
 
 ## Objectives
