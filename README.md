@@ -26,7 +26,7 @@ Task 1:
 a. The batsman with the most scored runs (after 9 matches of each team - not including semi-finals and final match) - \
 b. The leading wicket-taker bowler (after 9 matches of each team - not including semi-finals and final match) - \
 Task 2. Finalist Teams and Players - \
-Task 3. Winner of ICC Cricket World Cup 2023 - \
+Task 3. Winner of ICC Cricket World Cup 2023 - 
 
 ### Data Used
 
@@ -202,6 +202,14 @@ H. previous_data_per.csv (Scrapped, Previous Data Percentages)
 4. `Won`: The number of matches won by the team against the specified opposition.
 5. `Lost`: The number of matches lost by the team against the specified opposition.
 6. `%`: The win percentage, calculated as the ratio of matches won to the total matches played, expressed as a percentage.
+
+I. stadium_details.csv (Scrapped, ESPN Cricinfo)
+
+1. `venue`: The cricket stadium or venue for which the statistics are recorded.
+2. `won_after_bat_first`: The number of matches won at the venue by teams batting first.
+3. `won_after_chase`: The number of matches won at the venue by teams chasing a target.
+4. `first_inning_score`: The average score in the first inning at the venue across all matches.
+5. `second_inning_score`: The average score in the second inning at the venue across all matches.
 
 
 ## Objectives
