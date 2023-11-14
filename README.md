@@ -26,7 +26,12 @@ Task 1:
 a. The batsman with the most scored runs (after 9 matches of each team - not including semi-finals and final match) - \
 b. The leading wicket-taker bowler (after 9 matches of each team - not including semi-finals and final match) - \
 Task 2. Finalist Teams and Players - \
-Task 3. Winner of ICC Cricket World Cup 2023 - 
+Below is the screenshot from the api output for Finalist Teams: (read the API section for more information on the api)! \
+![file_2023-11-14_16 11 26](https://github.com/dp2292/CP03-Data-Alchemists/assets/67496808/3ac9fbaf-d8c9-4199-9930-4cee50c16b5a)
+Below is the screenshot from the api output for Finalist Players for the winning teams: \
+![file_2023-11-14_16 12 10](https://github.com/dp2292/CP03-Data-Alchemists/assets/67496808/0d9d0ee4-2327-4d92-b61f-1fbc45be27a0)
+Task 3. Winner of ICC Cricket World Cup 2023 - \
+![file_2023-11-14_16 11 48](https://github.com/dp2292/CP03-Data-Alchemists/assets/67496808/fe623266-d316-4053-8c20-e872ee5c0f39)
 
 ### Data Used
 
@@ -211,6 +216,11 @@ I. stadium_details.csv (Scrapped, ESPN Cricinfo)
 4. `first_inning_score`: The average score in the first inning at the venue across all matches.
 5. `second_inning_score`: The average score in the second inning at the venue across all matches.
 
+J. updatedTable.csv: points table, but updated after some matches (>32 matches played).
+
+K. semis_winner.csv: 2 winners of semi finals were stored in this file.
+
+Apart from this, we scrapped batsman and bowler stats for previous world cups and this world cup for visualizations and EDA. We used the best fitting data for making predictions via trial and error method and whatever that felt logical at the moment. For more information on the choices made on data, read comments and notes in the notebooks for the model!
 
 ## Objectives
 
