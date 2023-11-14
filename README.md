@@ -14,18 +14,19 @@
 In this project we had to make predictions regarding the ICC World Cup 2023. At the time of making this project, the world cup is ongoing and many matches are yet to be played. 
 
 ### Tasks
-1. Predicting the batsman who will score most runs in the tournament.
-2. Predicting the bowler who will be the leading wicket-taker in the tournament.
-3. Predicting the Finalist Teams and Players
-4. Predict the Winner of ICC Cricket World Cup 2023
+Task 1:
+a. Predicting the batsman who will score most runs in the tournament.
+b. Predicting the bowler who will be the leading wicket-taker in the tournament.
+Task 2: Predicting the Finalist Teams and Players
+Task 3: Predict the Winner of ICC Cricket World Cup 2023
 
 ### Result of the tasks
 
-1. The batsman with the most scored runs (after 9 matches of each team - not including semi-finals and final match) -
-2. The leading wicket-taker bowler (after 9 matches of each team - not including semi-finals and final match) -
-3. Predicting the Playing 11 for the finalists - 
-4. Finalist Teams and Players -
-5. Winner of ICC Cricket World Cup 2023 - 
+Task 1:
+a. The batsman with the most scored runs (after 9 matches of each team - not including semi-finals and final match) -
+b. The leading wicket-taker bowler (after 9 matches of each team - not including semi-finals and final match) -
+Task 2. Finalist Teams and Players -
+Task 3. Winner of ICC Cricket World Cup 2023 - 
 
 ### Data Used
 
