@@ -27,9 +27,9 @@ a. The batsman with the most scored runs (after 9 matches of each team - not inc
 b. The leading wicket-taker bowler (after 9 matches of each team - not including semi-finals and final match) - \
 Task 2. Finalist Teams and Players - \
 Below is the screenshot from the api output for Finalist Teams: (read the API section for more information on the api)! \
-![file_2023-11-14_16 11 26](https://github.com/dp2292/CP03-Data-Alchemists/assets/67496808/3ac9fbaf-d8c9-4199-9930-4cee50c16b5a)
+![file_2023-11-14_16 11 26](https://github.com/dp2292/CP03-Data-Alchemists/assets/67496808/3ac9fbaf-d8c9-4199-9930-4cee50c16b5a)\
 Below is the screenshot from the api output for Finalist Players for the winning teams: \
-![file_2023-11-14_16 12 10](https://github.com/dp2292/CP03-Data-Alchemists/assets/67496808/0d9d0ee4-2327-4d92-b61f-1fbc45be27a0)
+![file_2023-11-14_16 12 10](https://github.com/dp2292/CP03-Data-Alchemists/assets/67496808/0d9d0ee4-2327-4d92-b61f-1fbc45be27a0)\
 Task 3. Winner of ICC Cricket World Cup 2023 - \
 ![file_2023-11-14_16 11 48](https://github.com/dp2292/CP03-Data-Alchemists/assets/67496808/fe623266-d316-4053-8c20-e872ee5c0f39)
 
