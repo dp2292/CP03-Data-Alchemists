@@ -7,7 +7,7 @@
 | [Prarthee Desai](https://github.com/Prarthee-Desai)   | [202001257](mailto:202001257@daiict.ac.in)    | Leading wicket-taker prediction model |
 | [Devansh Patel](https://github.com/dp2292)     | [202001262](mailto:202001262@daiict.ac.in)    | Semis and World Cup Final Winner and Playing 11 Team Prediction Model |
 | [Dhruv Patel](https://github.com/Dhruv0348)       | [202001271](mailto:202001271@daiict.ac.in)    | Leading run scorer batsman prediction model |
-| [Krish Patel](https://github.com/KrishPatel452)       | [202001452](mailto:202001452@daiict.ac.in)    | API Development |
+| [Krish Patel](https://github.com/KrishPatel452)       | [202001452](mailto:202001452@daiict.ac.in)    | API Development, API Documentation & Testing|
 | [Jaykumar Navadiya](https://github.com/jaynavadiya) | [202001465](mailto:202001465@daiict.ac.in)    | Data Scrapping, Feature Extraction, EDA and Documentation |
 
 ## Project Overview
