@@ -45,7 +45,7 @@ Mostly, the data used was from [ICC Mens World Cup 2023](https://www.kaggle.com/
 After creating the models, we created an api for every task which makes use of the underlying models to make predictions. The details of these apis are given below as well.
 
 
-### Installation and Run Instructions
+### API Installation and Run Instructions
    #### 1. Clone the Repository:
    Open a terminal or command prompt and run the following command to clone the repository to your local machine:
    ```bash
