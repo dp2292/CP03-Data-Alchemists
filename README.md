@@ -308,6 +308,16 @@ K. semis_winner.csv: 2 winners of semi finals were stored in this file.
 
 Apart from this, we scrapped batsman and bowler stats for previous world cups and this world cup for visualizations and EDA. We used the best fitting data for making predictions via trial and error method and whatever that felt logical at the moment. For more information on the choices made on data, read comments and notes in the notebooks for the model!
 
+### Using these dataset in various applications:
+
+1. player_details -> playing 11
+2. points_table -> finalist_prediction (just for refernce to calculate)
+3. previous_data_per -> finalist/winner prediction (To predict the win rate of one team over other)
+4. semis_winner -> semi final winner teams just to record the teams of the final
+5. stadium_details -> final/winner prediction (By using avg runs per innings, other details)
+6. upcoming_semis -> 2 matches of 4 teams of semi finals and its fixture
+7. updatedTable -> updated point table
+
 ## Objectives
 
 The primary objectives of this data mining project are as follows:
