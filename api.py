@@ -7,23 +7,23 @@ from sklearn.preprocessing import LabelEncoder
 import shutil
 import joblib
 
-toss_scaler = joblib.load('toss_scaler.pkl')
-inning_1_scaler = joblib.load('scaler_inning1.pkl')
-inning_2_scaler = joblib.load('scaler_inning2.pkl')
-player_scaler = joblib.load('player_scaler.pkl')
+toss_scaler = joblib.load('./pickles/toss_scaler.pkl')
+inning_1_scaler = joblib.load('./pickles/scaler_inning1.pkl')
+inning_2_scaler = joblib.load('./pickles/scaler_inning2.pkl')
+player_scaler = joblib.load('./pickles/player_scaler.pkl')
 
 app=FastAPI()
-overs_model = pkl.load(open('over_model.pkl', 'rb'))
-inning1_model = pkl.load(open('inning_1_run.pkl', 'rb'))
-inning2_model = pkl.load(open('inning_2_run.pkl', 'rb'))
-toss_model = pkl.load(open('toss_prediction.pkl', 'rb'))
-player_model = pkl.load(open('player_model.pkl', 'rb'))
+overs_model = pkl.load(open('./pickles/over_model.pkl', 'rb'))
+inning1_model = pkl.load(open('./pickles/inning_1_run.pkl', 'rb'))
+inning2_model = pkl.load(open('./pickles/inning_2_run.pkl', 'rb'))
+toss_model = pkl.load(open('./pickles/toss_prediction.pkl', 'rb'))
+player_model = pkl.load(open('./pickles/player_model.pkl', 'rb'))
 
 app =FastAPI()
 
 def get_percentages(team_array, opposition_array):
     # Read the CSV data
-    df = pd.read_csv('previous_data_per.csv')
+    df = pd.read_csv('./csvs/previous_data_per.csv')
 
     # Initialize an array to store the percentages
     result_array = []
@@ -47,8 +47,8 @@ def get_percentages(team_array, opposition_array):
 
 def get_semi_percentages(team_array, opposition_array):
     # Read the CSV data
-    df = pd.read_csv('previous_data_per.csv')
-    recent = pd.read_csv('matches.csv')
+    df = pd.read_csv('./csvs/previous_data_per.csv')
+    recent = pd.read_csv('./csvs/matches.csv')
 
     # Initialize an array to store the percentages
     result_array = []
@@ -81,10 +81,10 @@ def get_semi_percentages(team_array, opposition_array):
 
 def get_final_percentages(team, opposition):
     # Read the CSV data
-    df = pd.read_csv('previous_data_per.csv')
-    recent = pd.read_csv('matches.csv')
+    df = pd.read_csv('./csvs/previous_data_per.csv')
+    recent = pd.read_csv('./csvs/matches.csv')
 
-    # print(team_array, opposition_array)
+    # #print(team_array, opposition_array)
 
     # Initialize an array to store the percentages
     result_array = []
@@ -123,7 +123,7 @@ def get_final_percentages(team, opposition):
 
 # To predict the resultant score of the first innings without over constraints
 def predict_inning1(df_inning1,toss_mapping,number_of_matches):
-    # print("In function Predict inning 1 score\n")
+    # #print("In function Predict inning 1 score\n")
     feature=list(df_inning1.columns)
     number_of_features=df_inning1.shape[1]
     for i in range(0,number_of_features-2):
@@ -153,7 +153,7 @@ def over_predict_inning1(df_inning1,toss_mapping,number_of_matches,inning1_pred)
     # Reorder the columns
     df_inning1 = df_inning1.reindex(columns=['innings', 'venue', 'batting_team', 'bowling_team', 'total_runs_per_innings_match', '%'])
 
-    # print(df_inning1.astype(float))
+    # #print(df_inning1.astype(float))
 
     overs_pred1 = overs_model.predict(df_inning1.astype(float))
 
@@ -183,8 +183,8 @@ def predict_inning2(df_inning2,toss_mapping,number_of_matches,inning1_pred):
     df_inning2[['total_overs_played','first_inning_score','second_inning_score','total_runs_in_innings1']] = inning_2_scaler.transform(df_inning2[['total_overs_played','first_inning_score','second_inning_score','total_runs_in_innings1']])
 
     #save this df_inning2 to csv
-    # df_inning2.to_csv('dummy_2.csv', index=False)
-    # print(df_inning2.dtypes)
+    # df_inning2.to_csv('./csvs/dummy_2.csv', index=False)
+    # #print(df_inning2.dtypes)
     df_inning2['batting_team'] = df_inning2['batting_team'].astype(int)
     df_inning2['bowling_team'] = df_inning2['bowling_team'].astype(int)
     inning2_pred=inning2_model.predict(df_inning2.astype(float))
@@ -195,19 +195,27 @@ def predict_inning2(df_inning2,toss_mapping,number_of_matches,inning1_pred):
 def update_points(points_df, winner, loser, winner_runs, winner_overs, loser_runs, loser_overs):
     # Read the CSV data
 
-    # print(winner, loser)
+    # #print(winner, loser)
     # Read the CSV data
-    df = pd.read_csv('prev_data_per.csv')
+    df = pd.read_csv('./csvs/prev_data_per.csv')
     # Update the % column for winner vs loser
+
+
     if not df.loc[(df['Team'] == winner) & (df['Opposition'] == loser), '%'].empty:
-       df.loc[(df['Team'] == winner) & (df['Opposition'] == loser), '%'] = float(df.loc[(df['Team'] == winner) & (df['Opposition'] == loser), '%'].values[0]) + 15
+        if df.loc[(df['Team'] == winner) & (df['Opposition'] == loser), '%'].values[0] == '-':
+            df.loc[(df['Team'] == winner) & (df['Opposition'] == loser), '%'] = 0.5
+        else:
+            df.loc[(df['Team'] == winner) & (df['Opposition'] == loser), '%'] = float(df.loc[(df['Team'] == winner) & (df['Opposition'] == loser), '%'].values[0]) + 15
 
     # Update the % column for loser vs winner
     if not df.loc[(df['Team'] == loser) & (df['Opposition'] == winner), '%'].empty:
-        df.loc[(df['Team'] == loser) & (df['Opposition'] == winner), '%'] = float(df.loc[(df['Team'] == winner) & (df['Opposition'] == loser), '%'].values[0]) - 15
+        if df.loc[(df['Team'] == loser) & (df['Opposition'] == winner), '%'].values[0] == '-':
+            df.loc[(df['Team'] == loser) & (df['Opposition'] == winner), '%'] = 0.5
+        else:
+            df.loc[(df['Team'] == loser) & (df['Opposition'] == winner), '%'] = float(df.loc[(df['Team'] == winner) & (df['Opposition'] == loser), '%'].values[0]) - 15
 
     # Write the updated data back to the CSV file
-    df.to_csv('../prev_data_per.csv', index=False)
+    df.to_csv('./csvs/../prev_data_per.csv', index=False)
 
     # Get the indices of the winner and loser
     winner_index = points_df[points_df['Team'] == winner].index.values[0]
@@ -268,7 +276,7 @@ def update_points(points_df, winner, loser, winner_runs, winner_overs, loser_run
 
 def final_points(merge_df):
     # Read the CSV data
-    points_df = pd.read_csv('points_table.csv')
+    points_df = pd.read_csv('./csvs/points_table.csv')
 
     # Iterate through the input arrays
     for team1, team2, inning1_pred, inning2_pred, overs_inning1, overs_inning2 in zip(merge_df['team1'], merge_df['team2'], merge_df['inning1_pred'], merge_df['inning2_pred'],merge_df['overs_inning1'], merge_df['overs_inning2']):
@@ -280,7 +288,7 @@ def final_points(merge_df):
 
     # Sort the DataFrame by points and net run rate
     points_df = points_df.sort_values(by=['Points', 'Net Run Rate'], ascending=False)
-    pd.DataFrame.to_csv(points_df, 'updatedTable.csv', index=False)
+    pd.DataFrame.to_csv(points_df, './csvs/updatedTable.csv', index=False)
 
 def mappings(team1, team2="Afghanistan", venue="Narendra Modi Stadium, Ahmedabad"):
     venue_dict = {'Arun Jaitley Stadium, Delhi': 0,
@@ -314,7 +322,7 @@ def mappings(team1, team2="Afghanistan", venue="Narendra Modi Stadium, Ahmedabad
                          'South Africa': 8,
                          'Sri Lanka': 9}
     
-    # print(team1, team2, venue)
+    # #print(team1, team2, venue)
 
     venue_value = venue_dict[venue]
     team1_value = batting_team_dict[team1]
@@ -335,13 +343,14 @@ def reverse_mappings(team1_value):
                          9: 'Sri Lanka'}
     
     # print(team1_value)
+
     team1_value=batting_team_dict[team1_value]
     
     return team1_value
 
 #base function to predict the match winner
 def predict():
-    df=pd.read_csv('matches.csv')
+    df=pd.read_csv('./csvs/matches.csv')
     df.drop(['season','date', 'match_number','player_of_match', 'umpire1', 'umpire2',
        'reserve_umpire', 'match_referee', 'winner', 'winner_runs',
        'winner_wickets', 'match_type','city'],axis='columns',inplace=True)
@@ -353,7 +362,7 @@ def predict():
         df[column] = le.fit_transform(df[column])
         toss_mapping[column] = dict(zip(le.classes_, le.transform(le.classes_)))
 
-    df=pd.read_csv('upcoming_matches.csv')
+    df=pd.read_csv('./csvs/upcoming_matches.csv')
     number_of_matches=df.shape[0]
     toss_winner=[]
     toss_losser=[]
@@ -363,7 +372,7 @@ def predict():
     for i in range(0,number_of_matches):
         #generate random number between 0 and 1
         num = np.random.uniform(0, 1)
-        # print(num)
+        # #print(num)
         if  num < 0.5:
             toss_winner.append(df.iloc[i]['team1'])
             toss_losser.append(df.iloc[i]['team2'])
@@ -373,17 +382,17 @@ def predict():
 
     df['toss_winner']=toss_winner
 
-    print(df)
+    # #print(df)
     # Use apply and lambda functions to map values based on 'toss_mapping'
     df = df.apply(lambda col: col.map(lambda x: toss_mapping[col.name][x] if col.name in toss_mapping else x))
-    stadium = pd.read_csv('stadium_details.csv')
+    stadium = pd.read_csv('./csvs/stadium_details.csv')
     stadium['venue'] = stadium['venue'].str.split(',').str[0]
     stadium['venue'] = le.fit_transform(stadium['venue'])
     df = pd.merge(df, stadium, left_on='venue', right_on='venue', how='left')
     df[['won_after_bat_first', 'won_after_chase', 'first_inning_score', 'second_inning_score']] = toss_scaler.transform(df[['won_after_bat_first', 'won_after_chase', 'first_inning_score', 'second_inning_score']]) 
     toss_prediction = toss_model.predict(df)
     toss_prediction = np.round(toss_prediction)
-    print(toss_prediction)
+    #print(toss_prediction)
     # toss_prediction = np.array([1 for i in range(0, number_of_matches)])
 
     batting_team1=[]
@@ -412,7 +421,7 @@ def predict():
     df_inning1['team2']=bowling_team1
     df_inning1['total_overs_played']=Total_Overs_Played
     #merge stadium and df_inning1 on venue
-    stadium = pd.read_csv('stadium_details.csv')
+    stadium = pd.read_csv('./csvs/stadium_details.csv')
     stadium['venue'] = stadium['venue'].str.split(',').str[0]
     stadium['venue'] = le.fit_transform(stadium['venue'])
     df_inning1 = pd.merge(df_inning1, stadium, left_on='venue', right_on='venue', how='left')
@@ -432,7 +441,7 @@ def predict():
     df_inning2['team2'] = batting_team1
     df_inning2['venue'] = venue_x
     df_inning2['total_overs_played'] = Total_Overs_Played
-    stadium = pd.read_csv('stadium_details.csv')
+    stadium = pd.read_csv('./csvs/stadium_details.csv')
     stadium['venue'] = stadium['venue'].str.split(',').str[0]
     stadium['venue'] = le.fit_transform(stadium['venue'])
     df_inning2 = pd.merge(df_inning2, stadium, left_on='venue', right_on='venue', how='left')
@@ -459,27 +468,33 @@ def predict():
     merge_df['overs_inning1'] = list(overs_inning1)
     merge_df['overs_inning2'] = list(overs_inning2)
 
-    # print(merge_df.head(15))
+    #print(merge_df.head(15))
+
     winner = []
 
     for i in range(len(merge_df)):
         if(merge_df['inning1_pred'][i] > merge_df['inning2_pred'][i]):
-            winner.append(reverse_mappings(merge_df['team1'][i]))
-            print(f"{merge_df['team1'][i]} will win with Batting first with {int(merge_df['inning1_pred'][i])} runs vs {int(merge_df['inning2_pred'][i])} runs {merge_df['team2'][i]} will lose")
+            winner.append((merge_df['team1'][i]))
+            #print(f"{merge_df['team1'][i]} will win with Batting first with {int(merge_df['inning1_pred'][i])} runs vs {int(merge_df['inning2_pred'][i])} runs {merge_df['team2'][i]} will lose")
         else:
-            winner.append(reverse_mappings(merge_df['team2'][i]))
-            print(f"{merge_df['team2'][i]} will win with Bowling First with {int(merge_df['inning2_pred'][i])} runs vs {int(merge_df['inning1_pred'][i])} runs {merge_df['team1'][i]} will lose")
+            winner.append((merge_df['team2'][i]))
+            #print(f"{merge_df['team2'][i]} will win with Bowling First with {int(merge_df['inning2_pred'][i])} runs vs {int(merge_df['inning1_pred'][i])} runs {merge_df['team1'][i]} will lose")
 
     #save this merge_df to csv
-    # print(merge_df.head(15))
+    # #print(merge_df.head(15))
 
     final_points(merge_df)
 
     winner_df = pd.DataFrame({'winner': winner})
-    winner_df.to_csv('semis_winner.csv', index=False)
+
+    # #print(winner)
+
+    winner_df.to_csv('./csvs/semis_winner.csv', index=False)
+
+    return winner
 
 def predict_finalists():
-    updated_points_df = pd.read_csv('updatedTable.csv')
+    updated_points_df = pd.read_csv('./csvs/updatedTable.csv')
 
     top_4_df = updated_points_df.head(4)
 
@@ -498,7 +513,7 @@ def predict_finalists():
     df = pd.DataFrame(data)
 
     # write the DataFrame to a CSV file
-    df.to_csv('upcoming_semis.csv', index=False)
+    df.to_csv('./csvs/upcoming_semis.csv', index=False)
 
     le=LabelEncoder()
     toss_mapping = {}
@@ -523,7 +538,7 @@ def predict_finalists():
         if column in toss_mapping:
             df[column] = df[column].map(toss_mapping[column])
 
-    stadium = pd.read_csv('stadium_details.csv')
+    stadium = pd.read_csv('./csvs/stadium_details.csv')
     stadium['venue'] = stadium['venue'].str.split(',').str[0]
     stadium['venue'] = le.fit_transform(stadium['venue'])
     df = pd.merge(df, stadium, left_on='venue', right_on='venue', how='left')
@@ -556,7 +571,7 @@ def predict_finalists():
     df_inning1['team1']=batting_team1
     df_inning1['team2']=bowling_team1
     df_inning1['total_overs_played']=Total_Overs_Played
-    stadium = pd.read_csv('stadium_details.csv')
+    stadium = pd.read_csv('./csvs/stadium_details.csv')
     stadium['venue'] = stadium['venue'].str.split(',').str[0]
     stadium['venue'] = le.fit_transform(stadium['venue'])
     df_inning1 = pd.merge(df_inning1, stadium, left_on='venue', right_on='venue', how='left')
@@ -578,7 +593,7 @@ def predict_finalists():
     df_inning2['team2'] = batting_team1
     df_inning2['venue'] = venue_x
     df_inning2['total_overs_played'] = Total_Overs_Played
-    stadium = pd.read_csv('stadium_details.csv')
+    stadium = pd.read_csv('./csvs/stadium_details.csv')
     stadium['venue'] = stadium['venue'].str.split(',').str[0]
     stadium['venue'] = le.fit_transform(stadium['venue'])
     df_inning2 = pd.merge(df_inning2, stadium, left_on='venue', right_on='venue', how='left')
@@ -601,35 +616,42 @@ def predict_finalists():
     merge_df['team1'] = batting_team1
     merge_df['team2'] = bowling_team1
     merge_df['venue'] = venue_x
-    merge_df['inning1_pred'] = list(inning1_pred)
+    merge_df['inning1_pred'] = (inning1_pred)
     merge_df['inning2_pred'] = list(inning2_pred)
     merge_df['overs_inning1'] = list(overs_inning1)
     merge_df['overs_inning2'] = list(overs_inning2)
 
-    # print(merge_df.head(15))
+    #print("Hello")
+
+    print(merge_df.head(15))
+
+    #print()
+    #print()
+
     winner = []
 
     for i in range(len(merge_df)):
         if(merge_df['inning1_pred'][i] > merge_df['inning2_pred'][i]):
             winner.append(reverse_mappings(merge_df['team1'][i]))
-            print(f"{reverse_mappings(merge_df['team1'][i])} will win with Batting first with {int(merge_df['inning1_pred'][i])} runs vs {int(merge_df['inning2_pred'][i])} runs {reverse_mappings(merge_df['team2'][i])} will lose")
+            print(f"{reverse_mappings(merge_df['team1'][i])} will win with Batting first with {(merge_df['inning1_pred'][i])} runs vs {(merge_df['inning2_pred'][i])} runs {reverse_mappings(merge_df['team2'][i])} will lose")
         else:
             winner.append(reverse_mappings(merge_df['team2'][i]))
-            print(f"{reverse_mappings(merge_df['team2'][i])} will win with Bowling First with {int(merge_df['inning2_pred'][i])} runs vs {int(merge_df['inning1_pred'][i])} runs {reverse_mappings(merge_df['team1'][i])} will lose")
+            print(f"{reverse_mappings(merge_df['team2'][i])} will win with Bowling First with {(merge_df['inning2_pred'][i])} runs vs {(merge_df['inning1_pred'][i])} runs {reverse_mappings(merge_df['team1'][i])} will lose")
 
     #save this merge_df to csv
+    print(winner)
 
     # create a DataFrame from the winner list
     df = pd.DataFrame({'semi_final_winner': winner})
-    df.to_csv('semis_winner.csv', index=False)
+    df.to_csv('./csvs/semis_winner.csv', index=False)
 
-    # print(merge_df.head(15))
+    # #print(merge_df.head(15))
     return winner
     
     # Predict for the final
 
 def predict_finalWinner(winner):
-    # print(winner)
+    # #print(winner)
     v1,t1,t2 = mappings(winner[0], winner[1], 'Narendra Modi Stadium, Ahmedabad')
 
     data = [
@@ -640,7 +662,7 @@ def predict_finalWinner(winner):
     df = pd.DataFrame(data)
 
     # write the DataFrame to a CSV file
-    df.to_csv('upcoming_final.csv', index=False)
+    df.to_csv('./csvs/upcoming_final.csv', index=False)
 
     le=LabelEncoder()
     toss_mapping = {}
@@ -664,7 +686,7 @@ def predict_finalWinner(winner):
         if column in toss_mapping:
             df[column] = df[column].map(toss_mapping[column])
 
-    stadium = pd.read_csv('stadium_details.csv')
+    stadium = pd.read_csv('./csvs/stadium_details.csv')
     stadium['venue'] = stadium['venue'].str.split(',').str[0]
     stadium['venue'] = le.fit_transform(stadium['venue'])
     df = pd.merge(df, stadium, left_on='venue', right_on='venue', how='left')
@@ -698,7 +720,7 @@ def predict_finalWinner(winner):
     df_inning1['team1']=batting_team1
     df_inning1['team2']=bowling_team1
     df_inning1['total_overs_played']=Total_Overs_Played
-    stadium = pd.read_csv('stadium_details.csv')
+    stadium = pd.read_csv('./csvs/stadium_details.csv')
     stadium['venue'] = stadium['venue'].str.split(',').str[0]
     stadium['venue'] = le.fit_transform(stadium['venue'])
     df_inning1 = pd.merge(df_inning1, stadium, left_on='venue', right_on='venue', how='left')
@@ -723,7 +745,7 @@ def predict_finalWinner(winner):
     df_inning2['team2'] = batting_team1
     df_inning2['venue'] = venue_x
     df_inning2['total_overs_played'] = Total_Overs_Played
-    stadium = pd.read_csv('stadium_details.csv')
+    stadium = pd.read_csv('./csvs/stadium_details.csv')
     stadium['venue'] = stadium['venue'].str.split(',').str[0]
     stadium['venue'] = le.fit_transform(stadium['venue'])
     df_inning2 = pd.merge(df_inning2, stadium, left_on='venue', right_on='venue', how='left')
@@ -750,31 +772,31 @@ def predict_finalWinner(winner):
 
     winner = []
 
+    #print("Hello")
+
+    #print(merge_df)
+
     for i in range(len(merge_df)):
         if(merge_df['inning1_pred'][i] > merge_df['inning2_pred'][i]):
             winner.append(reverse_mappings(merge_df['team1'][i]))
-            print(f"{reverse_mappings(merge_df['team1'][i])} will win with Batting first with {int(merge_df['inning1_pred'][i])} runs vs {int(merge_df['inning2_pred'][i])} runs {reverse_mappings(merge_df['team2'][i])} will lose")
+            #print(f"{reverse_mappings(merge_df['team1'][i])} will win with Batting first with {(reverse_mappings(merge_df['inning1_pred'][i]))} runs vs {reverse_mappings(merge_df['inning2_pred'][i])} runs {reverse_mappings(merge_df['team2'][i])} will lose")
         else:
             winner.append(reverse_mappings(merge_df['team2'][i]))
-            print(f"{reverse_mappings(merge_df['team2'][i])} will win with Bowling First with {int(merge_df['inning2_pred'][i])} runs vs {int(merge_df['inning1_pred'][i])} runs {reverse_mappings(merge_df['team1'][i])} will lose")
+            #print(f"{reverse_mappings(merge_df['team2'][i])} will win with Bowling First with {reverse_mappings(merge_df['inning2_pred'][i])} runs vs {reverse_mappings(merge_df['inning1_pred'][i])} runs {reverse_mappings(merge_df['team1'][i])} will lose")
+
+    # #print(winner)
 
     return winner
 
 def semi_winner():
-    final_csv = pd.read_csv('semis_winner.csv')
+    final_csv = pd.read_csv('./csvs/semis_winner.csv')
     final_csv = final_csv.head()
     return final_csv
 
 def predict_semifinalists():
-    final_csv = pd.read_csv('updatedTable.csv')
+    final_csv = pd.read_csv('./csvs/updatedTable.csv')
     final_csv = final_csv.head(4)
     return final_csv
-
-shutil.copyfile('previous_data_per.csv', 'prev_data_per.csv')
-
-# predict()
-# predict_finalists()
-# 
 
 ###################################################################################################################################
 ###################################################################################################################################
@@ -783,13 +805,16 @@ shutil.copyfile('previous_data_per.csv', 'prev_data_per.csv')
 ###################################################################################################################################
 
 def get_playing11_for_teams():
-    team = predict_finalist_team()
-    team = team['tables']
+    #get teams from semi_winner.csv
+    semi_winner = pd.read_csv('./csvs/semis_winner.csv')
+    semi_winner = semi_winner['semi_final_winner'].values
 
-    print("Finalist")
-    print(team)
+    team = semi_winner
 
-    df_players = pd.read_csv('player_details.csv')
+    #print("Finalist")
+    #print(team)
+
+    df_players = pd.read_csv('./csvs/player_details.csv')
 
     le = LabelEncoder()
 
@@ -799,15 +824,14 @@ def get_playing11_for_teams():
         df_players[column] = le.fit_transform(df_players[column])
         mapping[column] = dict(zip(le.classes_, le.transform(le.classes_)))
 
-    # print(mapping)
+    # #print(mapping)
 
     df_players.drop(['opponent_team', 'venue', 'match_runs', 'match_wickets'], axis = 1, inplace=True)
 
-    # print(df_players)
-    
+    # #print(df_players)
     df_players.drop_duplicates(subset=['player_name'], inplace=True)
 
-    df_players[['total_runs','highest_score','batting_avg','bowling_avg','strike_rate','economy','bowling_runs','total_wickets']] = player_scaler.fit_transform(df_players[['total_runs','highest_score','batting_avg','bowling_avg','strike_rate','economy','bowling_runs','total_wickets']])
+    df_players[['total_runs','highest_score','batting_avg','bowling_avg','strike_rate','economy','bowling_runs','total_wickets']] = player_scaler.transform(df_players[['total_runs','highest_score','batting_avg','bowling_avg','strike_rate','economy','bowling_runs','total_wickets']])
 
     tmp1, t1_id, tmp2 = mappings(team[0])
     tmp3, t2_id, tmp4 = mappings(team[1])
@@ -821,7 +845,7 @@ def get_playing11_for_teams():
     team1['venue'] = 7
     team2['venue'] = 7
 
-    # print(team1.isnull().sum())
+    # #print(team1.isnull().sum())
 
     player_t1 = player_model.predict(team1)
     
@@ -833,7 +857,7 @@ def get_playing11_for_teams():
 
     player_t1['id'] = team1['player_name'].values
     
-    # print(player_t1)
+    # #print(player_t1)
 
     player_t2 = player_model.predict(team2)
 
@@ -845,29 +869,49 @@ def get_playing11_for_teams():
 
     player_t2['id'] = team2['player_name'].values
 
-    # print(player_t2)
+    # #print(player_t2)
 
     player_t1 = player_t1.sort_values(by=[0], ascending=False)
 
     for i in range(len(player_t1)):
+
         for key, value in mapping['player_name'].items():
             if value == player_t1['id'][i]:
                 player_t1['id'][i] = key
 
-    # print(player_t1)
+    # #print(player_t1)
 
     batsman_t1 = player_t1.head(6)
     player_t1 = player_t1.sort_values(by=[1], ascending=False)
     bowler_t1 =[]
 
-    for i in range(len(player_t1)):
-        if player_t1['id'][i] not in batsman_t1['id'].values:
-            bowler_t1.append(player_t1['id'][i])
-        if len(bowler_t1) == 5:
-            break
+    player_t1 = player_t1.sort_values(by=[1], ascending=False)
 
-    playing11_t1 = batsman_t1['id'].values.tolist() + bowler_t1
-    print(playing11_t1)
+    batsman_t1 = player_t1.head(6)
+    batsman_ids = set(batsman_t1['id'])
+    bowler_t1 = player_t1[~player_t1['id'].isin(batsman_ids)].head(5)
+    
+    # playing11_t1 = batsman_t1['id'].values.tolist() + bowler_t1
+    #combine batsman_t1 and bowler_t1
+    playing11_t1 = batsman_t1['id'].values.tolist() + bowler_t1['id'].values.tolist()
+
+    player_t2 = player_t2.sort_values(by=[0], ascending=False)
+
+    for i in range(len(player_t2)):
+        for key, value in mapping['player_name'].items():
+            if value == player_t2['id'][i]:
+                player_t2['id'][i] = key
+
+    batsman_t2 = player_t2.head(6)
+    player_t2 = player_t2.sort_values(by=[1], ascending=False)
+    bowler_t2 =[]
+    batsman_ids = set(batsman_t2['id'])
+    bowler_t2 = player_t2[~player_t2['id'].isin(batsman_ids)].head(5)
+
+    
+    playing11_t2 = batsman_t2['id'].values.tolist() + bowler_t2['id'].values.tolist()
+
+    return playing11_t1, playing11_t2, team
 
 
 
@@ -881,12 +925,12 @@ def get_playing11_for_teams():
 
 @app.get("/")
 def index():
-    return {"Hello": "World"}
+    return {"IT-496 CP03": "G23"}
 
 @app.get("/predict")
 def predicts():
     winner = predict()
-    return {"winner": winner}
+    return {"winner_of_9mathces": winner}
 
 @app.get("/predict_semifinalists")
 def predict_semifinalist():
@@ -896,17 +940,22 @@ def predict_semifinalist():
 @app.get("/predict_finalists")
 def predict_finalist_team():
     tables = predict_finalists()
-    return {"tables": tables}
+    # #print(tables)
+    return {"final teams": tables}
 
 @app.get("/predict_winner")
 def predict_winner():
     tables = semi_winner()
-    print(tables["semi_final_winner"].values)
+    #print(tables["semi_final_winner"].values)
     winner = predict_finalWinner(tables["semi_final_winner"].values)
     # winner = predict_finalWinner(winner)
     return {"winner": winner}
 
-# if __name__ == "__main__":
-#     uvicorn.run(app, host="127.0.0.1", port=8000)
+@app.get("/get_playing11")
+def get_playing11():
+    team1, team2, teams = get_playing11_for_teams()
+    return {teams[0]: team1, teams[1]: team2}
 
-get_playing11_for_teams()
+if __name__ == "__main__":
+    # shutil.copyfile('./csvs/previous_data_per.csv', './csvs/prev_data_per.csv')
+    uvicorn.run(app, host="127.0.0.1", port=8080)
