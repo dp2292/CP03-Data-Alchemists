@@ -23,8 +23,11 @@ Task 3: Predict the Winner of ICC Cricket World Cup 2023
 ### Result of the tasks
 
 Task 1:
-a. The batsman with the most scored runs (after 9 matches of each team - not including semi-finals and final match) - \
-b. The leading wicket-taker bowler (after 9 matches of each team - not including semi-finals and final match) - \
+a. The batsman with the most scored runs (after 9 matches of each team - not including semi-finals and final match) - ![WhatsApp Image 2023-11-23 at 18 09 34](https://github.com/dp2292/CP03-Data-Alchemists/assets/67496808/6e9b7035-916c-4b46-b217-729e4c4ff8b9)
+
+\
+b. The leading wicket-taker bowler (after 9 matches of each team - not including semi-finals and final match) - ![WhatsApp Image 2023-11-23 at 18 09 16](https://github.com/dp2292/CP03-Data-Alchemists/assets/67496808/2a7f856c-580b-4b32-9ec2-5c742a13dc4c)
+\
 Task 2. Finalist Teams and Players:
 Below is the screenshot from the api output for Finalist Teams: (read the API section for more information on the api)! \
 ![file_2023-11-14_16 11 26](https://github.com/dp2292/CP03-Data-Alchemists/assets/67496808/3ac9fbaf-d8c9-4199-9930-4cee50c16b5a)\
